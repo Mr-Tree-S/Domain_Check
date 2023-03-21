@@ -1,5 +1,5 @@
 import requests
-from config import VT_API_KEY
+from config import VT_API_KEY, URLSCAN_API_KEY
 # It can be adjusted to only obtain source data through the API.
 # Filtering source data can be done in another lib
 
@@ -39,6 +39,17 @@ def get_mx(domain_to_scan):
 
 
 def get_url(domain_to_scan):
+    url = f'https://urlscan.io/api/v1/search/?q={domain_to_scan}'
+    headers = {
+        "accept": "application/json",
+        # "API-Key": URLSCAN_API_KEY
+    }
+    response = requests.get(url, headers=headers)
+    data = response.json()
+    total = data["total"]
+    if total != 0:
+        url = data["results"][0]["page"]["url"]
+        return url
     return "N/A"
 
 
