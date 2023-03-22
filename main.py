@@ -54,7 +54,7 @@ def main(domains, file, reputation, mx, url):
         return
 
     # Split the task to each thread for processing
-    num_threads = 10
+    num_threads = 4
     domain_lists = [domain_list[i:i+num_threads] for i in range(0, len(domain_list), num_threads)]
     for sub_domain_list in domain_lists:
         check_domain(sub_domain_list, mx, reputation, url)
