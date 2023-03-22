@@ -40,7 +40,8 @@ def check_domain(domain_list, mx, reputation, url):
 @click.option('-r', '--reputation', is_flag=True, help='Get Reputation for domain')
 @click.option('-m', '--mx', is_flag=True, help='Get MX record for domain')
 @click.option('-u', '--url', is_flag=True, help='Get URL for domain')
-def main(domains, file, reputation, mx, url):
+@click.option('-t', '--threads', type=int, default=4, help='Number of threads to use for checking domains')
+def main(domains, file, reputation, mx, url, threads):
     start_time = time.time()    # Record the time started
     print_header()
     domain_list = []
@@ -54,7 +55,7 @@ def main(domains, file, reputation, mx, url):
         return
 
     # Split the task to each thread for processing
-    num_threads = 4
+    num_threads = threads
     domain_lists = [domain_list[i:i+num_threads] for i in range(0, len(domain_list), num_threads)]
     for sub_domain_list in domain_lists:
         check_domain(sub_domain_list, mx, reputation, url)
