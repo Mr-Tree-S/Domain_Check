@@ -1,6 +1,6 @@
 # Domain_Check
 
-> A simple script for checking the MX record, reputation, and URL of multiple domains
+> A simple script for checking the reputation, MX record, and URL of multiple domains
 
 **Domain_Check** is being actively developed by [@Ripper-S](https://github.com/Ripper-S)
 
@@ -57,6 +57,6 @@ At present, I am alone in contributing
 
 
 ## License
-Copyright (C) Mauro Soria (ripper-s@ripper-s.com)
+Copyright (C) Ripper-S (ripper-s@ripper-s.com)
 
 License: Apache License 2.0
