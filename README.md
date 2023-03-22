@@ -10,6 +10,7 @@
 Choose one of these installation options:
 
 - Install with **git**: `git clone https://github.com/Ripper-S/Domain_Check.git`(**RECOMMENDED**)
+- Install relevant modules: `pip install -r requirements.txt`
 
 ### Options
 The script accepts the following command line arguments:
