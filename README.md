@@ -31,6 +31,8 @@ The script accepts the following command line arguments:
 
 - `-t`, `--threads`: The number of threads to use for brute force. The default is 4.
 
+- `-o`, `--output`: The name of the output file. If this option is used, the results are written to the specified file. If this option is not used, the results are written to the terminal.
+
 ### Configuration
 
 To use your API keys, replace your_VT_API_KEY and your_URLSCAN_API_KEY with your actual keys.
@@ -54,6 +56,12 @@ If you have a text file containing a list of domains to check, you can use the f
 
 ```bash
 python main.py -rmug --file domain_list.txt
+```
+
+The results are written to the terminal by default. If you want to write the results to a file, you can use the -o or --output option:
+
+```bash
+python main.py -rmug --file domain_list.txt -o results.txt
 ```
 
 Note that you can use any combination of the -r, -m, and -u options, and that the order of the parameters does not matter as long as the domain names and the --file option (if used) come after the options for checking reputation, MX records, and URLs.
