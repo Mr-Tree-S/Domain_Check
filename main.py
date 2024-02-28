@@ -9,11 +9,11 @@ def print_header():
 
 
 # Multithreading Domain Check Process
-def check_domain(domain_list, mx, reputation, url):
+def check_domain(domain_list, mx, reputation, urlscan):
     threads = []
     result_dict = {}
     for domain in domain_list:
-        thread = threading.Thread(target=get_domain_info, args=(domain, mx, reputation, url, result_dict))
+        thread = threading.Thread(target=get_domain_info, args=(domain, mx, reputation, urlscan, result_dict))
         threads.append(thread)
         thread.start()
     
@@ -29,8 +29,8 @@ def check_domain(domain_list, mx, reputation, url):
             click.echo(f"Reputation: {results['reputation']}")
         if 'mx' in results:
             click.echo(f"MX: {results['mx']}")
-        if 'url' in results:
-            click.echo(f"URL: {results['url']}")
+        if 'urlscan' in results:
+            click.echo(f"URL: {results['urlscan']}")
         click.echo()
 
 
@@ -39,9 +39,9 @@ def check_domain(domain_list, mx, reputation, url):
 @click.option('--file', type=click.Path(exists=True), help='Input file containing domain list')
 @click.option('-r', '--reputation', is_flag=True, help='Get Reputation for domain')
 @click.option('-m', '--mx', is_flag=True, help='Get MX record for domain')
-@click.option('-u', '--url', is_flag=True, help='Get URL for domain')
+@click.option('-u', '--urlscan', is_flag=True, help='Get URL for domain')
 @click.option('-t', '--threads', type=int, default=4, help='Number of threads to use for checking domains')
-def main(domains, file, reputation, mx, url, threads):
+def main(domains, file, reputation, mx, urlscan, threads):
     start_time = time.time()    # Record the time started
     print_header()
     domain_list = []
@@ -58,7 +58,7 @@ def main(domains, file, reputation, mx, url, threads):
     num_threads = threads
     domain_lists = [domain_list[i:i+num_threads] for i in range(0, len(domain_list), num_threads)]
     for sub_domain_list in domain_lists:
-        check_domain(sub_domain_list, mx, reputation, url)
+        check_domain(sub_domain_list, mx, reputation, urlscan)
 
     end_time = time.time()  # Record the time end
     total_time = end_time - start_time  # Total running time
