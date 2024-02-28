@@ -9,7 +9,7 @@ def print_header():
 
 
 # Multithreading Domain Check Process
-def check_domain(domain_list, mx, reputation, urlscan, guard_subdomailing):
+def check_domain(domain_list, mx, reputation, urlscan, guard_subdomailing, output):
     threads = []
     result_dict = {}
     for domain in domain_list:
@@ -23,7 +23,7 @@ def check_domain(domain_list, mx, reputation, urlscan, guard_subdomailing):
 
     # print results in order
     for domain in domain_list:
-        # click.echo(f"Domain: {domain}")
+        click.echo(f"Domain: {domain}")
         results = result_dict.get(domain, {})
         if 'reputation' in results:
             click.echo(f"Reputation: {results['reputation']}")
@@ -35,9 +35,25 @@ def check_domain(domain_list, mx, reputation, urlscan, guard_subdomailing):
             if results['guard_subdomailing'] != "N/A":
                 for entry in results['guard_subdomailing']:
                     for key, value in entry.items():
-                        click.echo(f"{key}: {value}")
+                        if key == "affected_subdomain":
+                            Found_OR_Not = "Yes"
+                            Affected_Subdomain = value
+                            click.echo(f"{key}: {value}")
             else:
+                Found_OR_Not = "No"
+                Affected_Subdomain = "N/A"
                 click.echo(f"guard subdomailing: {results['guard_subdomailing']}")
+            # Prepare data row
+            Domains = domain
+            delimiter = "|"
+            data_row = delimiter.join([Domains, Found_OR_Not, Affected_Subdomain])
+            # print(data_row)
+            # print("--------------------")
+
+            # Write to output file
+            if output:
+                with open(output, 'a') as file:
+                    file.write(data_row + "\n")
 
         click.echo()
 
@@ -50,7 +66,8 @@ def check_domain(domain_list, mx, reputation, urlscan, guard_subdomailing):
 @click.option('-u', '--urlscan', is_flag=True, help='Get urlscan results')
 @click.option('-g', '--guard_subdomailing', is_flag=True, help='Get guard subdomailing results')
 @click.option('-t', '--threads', type=int, default=4, help='Number of threads to use for checking domains')
-def main(domains, file, reputation, mx, urlscan, guard_subdomailing, threads):
+@click.option('-o', '--output', type=click.Path(), help='Output file path')
+def main(domains, file, reputation, mx, urlscan, guard_subdomailing, threads, output):
     start_time = time.time()    # Record the time started
     print_header()
     domain_list = []
@@ -67,7 +84,7 @@ def main(domains, file, reputation, mx, urlscan, guard_subdomailing, threads):
     num_threads = threads
     domain_lists = [domain_list[i:i+num_threads] for i in range(0, len(domain_list), num_threads)]
     for sub_domain_list in domain_lists:
-        check_domain(sub_domain_list, mx, reputation, urlscan, guard_subdomailing)
+        check_domain(sub_domain_list, mx, reputation, urlscan, guard_subdomailing, output)
 
     end_time = time.time()  # Record the time end
     total_time = end_time - start_time  # Total running time
