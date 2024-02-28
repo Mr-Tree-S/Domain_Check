@@ -59,7 +59,9 @@ def get_guard_subdomailing(domain):
     }
     response = requests.get(url, headers=headers)
     guard_subdomailing = response.json()
-    return guard_subdomailing
+    if type(guard_subdomailing) == list:
+        return guard_subdomailing
+    return "N/A"
 
 
 # Accept the domain and the type to check
@@ -67,14 +69,14 @@ def get_domain_info(domain, mx, reputation, urlscan, guard_subdomailing, result_
     domain_results = {}
     if reputation:
         result = get_vt_reputation(domain)
-        domain_results['reputation'] = result
+        domain_results["reputation"] = result
     if mx:
         result = get_vt_mx(domain)
-        domain_results['mx'] = result
+        domain_results["mx"] = result
     if urlscan:
         result = get_urlscan(domain)
-        domain_results['urlscan'] = result
+        domain_results["urlscan"] = result
     if guard_subdomailing:
         result = get_guard_subdomailing(domain)
-        domain_results['guard_subdomailing'] = result
+        domain_results["guard_subdomailing"] = result
     result_dict[domain] = domain_results

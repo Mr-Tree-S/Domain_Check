@@ -23,7 +23,7 @@ def check_domain(domain_list, mx, reputation, urlscan, guard_subdomailing):
 
     # print results in order
     for domain in domain_list:
-        click.echo(f"Domain: {domain}")
+        # click.echo(f"Domain: {domain}")
         results = result_dict.get(domain, {})
         if 'reputation' in results:
             click.echo(f"Reputation: {results['reputation']}")
@@ -32,7 +32,13 @@ def check_domain(domain_list, mx, reputation, urlscan, guard_subdomailing):
         if 'urlscan' in results:
             click.echo(f"urlscan: {results['urlscan']}")
         if 'guard_subdomailing' in results:
-            click.echo(f"guard subdomailing: {results['guard_subdomailing']}")
+            if results['guard_subdomailing'] != "N/A":
+                for entry in results['guard_subdomailing']:
+                    for key, value in entry.items():
+                        click.echo(f"{key}: {value}")
+            else:
+                click.echo(f"guard subdomailing: {results['guard_subdomailing']}")
+
         click.echo()
 
 

@@ -10,7 +10,7 @@
 
 Choose one of these installation options:
 
-- Install with **git**: `git clone https://github.com/Ripper-S/Domain_Check.git`(**RECOMMENDED**)
+- Install with **git**: `git clone https://github.com/Mr-Tree-S/Domain_Check.git`(**RECOMMENDED**)
 - Install relevant modules: `pip install -r requirements.txt`
 
 ### Options
@@ -25,7 +25,11 @@ The script accepts the following command line arguments:
 
 - `-m`, `--mx`: Check the MX record of each domain. This option queries the VirusTotal API to determine the MX record associated with each domain.
 
-- `-u`, `--url`: Check the URL associated with each domain. This option queries the urlscan.io API to determine the URL associated with each domain.
+- `-u`, `--urlscan`: Check the URL associated with each domain. This option queries the urlscan.io API to determine the URL associated with each domain.
+
+- `-g`, `--guard_subdomailing`: Check the SubdoMailer of each domain. This option queries the guard subdomailing API to determine the SubdoMailer associated with each domain.
+
+- `-t`, `--threads`: The number of threads to use for brute force. The default is 4.
 
 ### Configuration
 
@@ -37,19 +41,19 @@ Make sure to **keep your API keys secure and not to share them publicly**, as th
 To check one or more domains, run the following command in your terminal:
 
 ```bash
-python main.py -rmu example.com
+python main.py -rmug example.com
 ```
 
 You can specify multiple domains separated by spaces:
 
 ```bash
-python main.py -rmu example.com example.net
+python main.py -rmug example.com example.net
 ```
 
 If you have a text file containing a list of domains to check, you can use the following command:
 
 ```bash
-python main.py -rmu --file domain_list.txt
+python main.py -rmug --file domain_list.txt
 ```
 
 Note that you can use any combination of the -r, -m, and -u options, and that the order of the parameters does not matter as long as the domain names and the --file option (if used) come after the options for checking reputation, MX records, and URLs.
