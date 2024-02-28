@@ -5,8 +5,8 @@ from config import VT_API_KEY, URLSCAN_API_KEY
 
 
 # Various types of domain check functions
-def get_vt_reputation(domain_to_scan):
-    url = f'https://www.virustotal.com/api/v3/domains/{domain_to_scan}'
+def get_vt_reputation(domain):
+    url = f'https://www.virustotal.com/api/v3/domains/{domain}'
     headers = {
         "accept": "application/json",
         "x-apikey": VT_API_KEY
@@ -22,8 +22,8 @@ def get_vt_reputation(domain_to_scan):
     return "N/A"
 
 
-def get_vt_mx(domain_to_scan):
-    url = f'https://www.virustotal.com/api/v3/domains/{domain_to_scan}'
+def get_vt_mx(domain):
+    url = f'https://www.virustotal.com/api/v3/domains/{domain}'
     headers = {
         "accept": "application/json",
         "x-apikey": VT_API_KEY
@@ -38,8 +38,8 @@ def get_vt_mx(domain_to_scan):
     return "N/A"
 
 
-def get_urlscan(domain_to_scan):
-    url = f'https://urlscan.io/api/v1/search/?q={domain_to_scan}'
+def get_urlscan(domain):
+    url = f'https://urlscan.io/api/v1/search/?q={domain}'
     headers = {
         "accept": "application/json",
         # "API-Key": URLSCAN_API_KEY
@@ -52,18 +52,18 @@ def get_urlscan(domain_to_scan):
         return urlscan
     return "N/A"
 
-def get_guard_subdomailing(domain_to_scan):
-    url = f'https://guard.io/v3/subdomailing/domain?domain={domain_to_scan}'
+def get_guard_subdomailing(domain):
+    url = f'https://guard.io/v3/subdomailing/domain?domain={domain}'
     headers = {
         "accept": "/*",
     }
     response = requests.get(url, headers=headers)
-    data = response.json()
-    return data
+    guard_subdomailing = response.json()
+    return guard_subdomailing
 
 
 # Accept the domain and the type to check
-def get_domain_info(domain, mx, reputation, urlscan, result_dict):
+def get_domain_info(domain, mx, reputation, urlscan, guard_subdomailing, result_dict):
     domain_results = {}
     if reputation:
         result = get_vt_reputation(domain)
@@ -74,4 +74,7 @@ def get_domain_info(domain, mx, reputation, urlscan, result_dict):
     if urlscan:
         result = get_urlscan(domain)
         domain_results['urlscan'] = result
+    if guard_subdomailing:
+        result = get_guard_subdomailing(domain)
+        domain_results['guard_subdomailing'] = result
     result_dict[domain] = domain_results

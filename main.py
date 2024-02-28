@@ -9,11 +9,11 @@ def print_header():
 
 
 # Multithreading Domain Check Process
-def check_domain(domain_list, mx, reputation, urlscan):
+def check_domain(domain_list, mx, reputation, urlscan, guard_subdomailing):
     threads = []
     result_dict = {}
     for domain in domain_list:
-        thread = threading.Thread(target=get_domain_info, args=(domain, mx, reputation, urlscan, result_dict))
+        thread = threading.Thread(target=get_domain_info, args=(domain, mx, reputation, urlscan, guard_subdomailing, result_dict))
         threads.append(thread)
         thread.start()
     
@@ -30,18 +30,21 @@ def check_domain(domain_list, mx, reputation, urlscan):
         if 'mx' in results:
             click.echo(f"MX: {results['mx']}")
         if 'urlscan' in results:
-            click.echo(f"URL: {results['urlscan']}")
+            click.echo(f"urlscan: {results['urlscan']}")
+        if 'guard_subdomailing' in results:
+            click.echo(f"guard subdomailing: {results['guard_subdomailing']}")
         click.echo()
 
 
 @click.command()
 @click.argument('domains', nargs=-1)
 @click.option('--file', type=click.Path(exists=True), help='Input file containing domain list')
-@click.option('-r', '--reputation', is_flag=True, help='Get Reputation for domain')
-@click.option('-m', '--mx', is_flag=True, help='Get MX record for domain')
-@click.option('-u', '--urlscan', is_flag=True, help='Get URL for domain')
+@click.option('-r', '--reputation', is_flag=True, help='Get Reputation')
+@click.option('-m', '--mx', is_flag=True, help='Get MX record')
+@click.option('-u', '--urlscan', is_flag=True, help='Get urlscan results')
+@click.option('-g', '--guard_subdomailing', is_flag=True, help='Get guard subdomailing results')
 @click.option('-t', '--threads', type=int, default=4, help='Number of threads to use for checking domains')
-def main(domains, file, reputation, mx, urlscan, threads):
+def main(domains, file, reputation, mx, urlscan, guard_subdomailing, threads):
     start_time = time.time()    # Record the time started
     print_header()
     domain_list = []
@@ -58,7 +61,7 @@ def main(domains, file, reputation, mx, urlscan, threads):
     num_threads = threads
     domain_lists = [domain_list[i:i+num_threads] for i in range(0, len(domain_list), num_threads)]
     for sub_domain_list in domain_lists:
-        check_domain(sub_domain_list, mx, reputation, urlscan)
+        check_domain(sub_domain_list, mx, reputation, urlscan, guard_subdomailing)
 
     end_time = time.time()  # Record the time end
     total_time = end_time - start_time  # Total running time
