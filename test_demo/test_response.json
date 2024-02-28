@@ -1,0 +1,12 @@
+[
+    {
+        "domain": "msn.com",
+        "scanned_on": "2024-02-07 00:00:00",
+        "category": "games",
+        "affected_subdomain": "marthastewart.msn.com",
+        "method": "cname_takeover",
+        "domain_takenover": "msnmarthastewartsweeps.com",
+        "hijacked_date": "2022-08-30 00:00:00",
+        "last_updated": "2024-02-26 00:00:00"
+    }
+]

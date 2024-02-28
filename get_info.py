@@ -5,7 +5,7 @@ from config import VT_API_KEY, URLSCAN_API_KEY
 
 
 # Various types of domain check functions
-def get_reputation(domain_to_scan):
+def get_vt_reputation(domain_to_scan):
     url = f'https://www.virustotal.com/api/v3/domains/{domain_to_scan}'
     headers = {
         "accept": "application/json",
@@ -22,7 +22,7 @@ def get_reputation(domain_to_scan):
     return "N/A"
 
 
-def get_mx(domain_to_scan):
+def get_vt_mx(domain_to_scan):
     url = f'https://www.virustotal.com/api/v3/domains/{domain_to_scan}'
     headers = {
         "accept": "application/json",
@@ -38,7 +38,7 @@ def get_mx(domain_to_scan):
     return "N/A"
 
 
-def get_url(domain_to_scan):
+def get_urlscan(domain_to_scan):
     url = f'https://urlscan.io/api/v1/search/?q={domain_to_scan}'
     headers = {
         "accept": "application/json",
@@ -48,21 +48,30 @@ def get_url(domain_to_scan):
     data = response.json()
     total = data["total"]
     if total != 0:
-        url = data["results"][0]["page"]["url"]
-        return url
+        urlscan = data["results"][0]["page"]["url"]
+        return urlscan
     return "N/A"
+
+def get_guard_subdomailing(domain_to_scan):
+    url = f'https://guard.io/v3/subdomailing/domain?domain={domain_to_scan}'
+    headers = {
+        "accept": "/*",
+    }
+    response = requests.get(url, headers=headers)
+    data = response.json()
+    return data
 
 
 # Accept the domain and the type to check
-def get_domain_info(domain, mx, reputation, url, result_dict):
+def get_domain_info(domain, mx, reputation, urlscan, result_dict):
     domain_results = {}
     if reputation:
-        result = get_reputation(domain)
+        result = get_vt_reputation(domain)
         domain_results['reputation'] = result
     if mx:
-        result = get_mx(domain)
+        result = get_vt_mx(domain)
         domain_results['mx'] = result
-    if url:
-        result = get_url(domain)
-        domain_results['url'] = result
+    if urlscan:
+        result = get_urlscan(domain)
+        domain_results['urlscan'] = result
     result_dict[domain] = domain_results
