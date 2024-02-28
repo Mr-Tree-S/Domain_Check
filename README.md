@@ -2,11 +2,11 @@
 
 > A simple script for checking the reputation, MX record, and URL of multiple domains
 
-**Domain_Check** is being actively developed by [@Mr. Tree](https://github.com/Mr-Tree-S)
+**Domain_Check** is being actively developed by [Mr. Tree](https://github.com/Mr-Tree-S)
 
 ## Installation & Usage
 
-**Requirement: python 3.7 or higher**
+***Requirement: python 3.7 or higher***
 
 Choose one of these installation options:
 
@@ -64,6 +64,6 @@ At present, I am alone in contributing
 
 ## License
 
-Copyright (C) [@Mr. Tree](https://github.com/Mr-Tree-S)
+Copyright (C) [Mr. Tree](https://github.com/Mr-Tree-S)
 
 License: Apache License 2.0
